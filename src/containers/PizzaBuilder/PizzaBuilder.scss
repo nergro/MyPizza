@@ -1,9 +1,17 @@
 .PizzaBuilder {
   .row {
+    margin-top: 50px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    width: 100%;
+    align-items: center;
+    margin-left: 0px;
+    margin-right: 0px;
+
+    @media (max-width: 850px) {
+      flex-direction: column;
+      flex-direction: column-reverse;
+    }
   }
   .column {
     display: flex;
@@ -18,5 +26,8 @@
 
   .right-col {
     height: 100%;
+    @media (max-width: 850px) {
+      margin-bottom: 50px;
+    }
   }
 }
