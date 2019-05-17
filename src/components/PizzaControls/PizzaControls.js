@@ -23,6 +23,10 @@ const pizzaControls = props => {
           <li />
         </ul>
       </div>
+      <h5>
+        <strong>Total Cost:</strong>&nbsp;{props.totalCost.toFixed(2)}$
+      </h5>
+      <button className='checkout btn'>CHECKOUT</button>
     </div>
   );
 };
