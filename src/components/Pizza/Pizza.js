@@ -2,10 +2,10 @@ import React from 'react';
 import './Pizza.scss';
 import Ingredients from './Ingredients/Ingredients';
 
-const pizza = () => {
+const pizza = props => {
   return (
     <div className='Pizza'>
-      <Ingredients />
+      <Ingredients toppings={props.toppings} />
     </div>
   );
 };

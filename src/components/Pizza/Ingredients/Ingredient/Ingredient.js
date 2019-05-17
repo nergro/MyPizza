@@ -7,7 +7,15 @@ const ingredient = props => {
     <React.Fragment>
       {arr.map((x, i) => {
         let classes = props.ingredient + ' ' + props.ingredient + '-' + (i + 1);
-        return <div className={classes} key={props.ingredient + i} />;
+        let display = '';
+        props.added ? (display = 'block') : (display = 'none');
+        return (
+          <div
+            className={classes}
+            key={props.ingredient + i}
+            style={{ display: display }}
+          />
+        );
       })}
     </React.Fragment>
   );

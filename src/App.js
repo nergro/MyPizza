@@ -1,12 +1,11 @@
 import React from 'react';
 import './App.css';
-import Pizza from './components/Pizza/Pizza';
+import Layout from './hoc/Layout/Layout';
 
 function App() {
   return (
-    <div className='App'>
-      <h1>MyPizza</h1>
-      <Pizza />
+    <div>
+      <Layout />
     </div>
   );
 }
