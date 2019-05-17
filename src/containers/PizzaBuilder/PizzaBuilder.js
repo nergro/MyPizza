@@ -15,6 +15,12 @@ const TOPPING_PRICES = {
   Onions: 0.6
 };
 
+const SIZE_PRICES = {
+  Small: 2,
+  Large: 3,
+  Family: 5
+};
+
 export default class PizzaBuilder extends Component {
   state = {
     toppings: {
@@ -28,7 +34,13 @@ export default class PizzaBuilder extends Component {
       Peppers: false,
       Onions: false
     },
-    totalCost: 2
+    sizePicked: {
+      Small: false,
+      Large: false,
+      Family: false
+    },
+    anySizePicked: false,
+    totalCost: 0
   };
 
   addToppingHandler = topping => {
@@ -55,6 +67,32 @@ export default class PizzaBuilder extends Component {
     });
   };
 
+  pizzaSizeHandler = size => {
+    let oldTotal = this.state.totalCost;
+    let updatedSize = {
+      ...this.state.sizePicked
+    };
+    if (updatedSize[size] === false && this.state.anySizePicked) {
+      return;
+    }
+
+    if (updatedSize[size]) {
+      updatedSize[size] = false;
+      this.setState({
+        sizePicked: updatedSize,
+        totalCost: oldTotal - SIZE_PRICES[size],
+        anySizePicked: false
+      });
+    } else {
+      updatedSize[size] = true;
+      this.setState({
+        sizePicked: updatedSize,
+        totalCost: oldTotal + SIZE_PRICES[size],
+        anySizePicked: true
+      });
+    }
+  };
+
   render() {
     return (
       <div className='PizzaBuilder'>
@@ -65,6 +103,9 @@ export default class PizzaBuilder extends Component {
               addition={this.addToppingHandler}
               removal={this.removeToppingHandler}
               totalCost={this.state.totalCost}
+              pizzaSizeClicked={this.pizzaSizeHandler}
+              pizzaSize={this.state.sizePicked}
+              anySizePicked={this.state.anySizePicked}
             />
           </div>
           <div className='column'>
