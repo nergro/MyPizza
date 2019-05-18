@@ -5,6 +5,9 @@
   margin: auto;
   text-align: center;
   margin-bottom: 50px;
+  -webkit-box-shadow: 0px 0px 56px -19px rgba(255, 255, 255, 1);
+  -moz-box-shadow: 0px 0px 56px -19px rgba(255, 255, 255, 1);
+  box-shadow: 0px 0px 56px -19px rgba(255, 255, 255, 1);
 
   @media (max-width: 1250px) {
     width: 60%;
@@ -28,28 +31,31 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-bottom: 10px;
 
-    .Small img {
+    input:focus {
+      outline: none !important;
+    }
+
+    .Small {
       width: 40px;
       height: 40px;
+      transition: transform 0.2s ease-in;
     }
-    .Large img {
+    .Large {
       width: 50px;
       height: 50px;
       margin: 0 15px;
+      transition: transform 0.2s ease-in;
     }
-    .Family img {
+    .Family {
       width: 60px;
       height: 60px;
+      transition: transform 0.2s ease-in;
     }
 
-    .Small:hover,
-    .Large:hover,
-    .Family:hover {
-      opacity: 0.6;
-    }
-    .NotClicked {
-      opacity: 0.6;
+    .Clicked {
+      transform: scale(1.1, 1.1);
     }
   }
 
