@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './PizzaBuilder.scss';
 import Pizza from '../../components/Pizza/Pizza';
 import PizzaControls from '../../components/PizzaControls/PizzaControls';
+import Modal from '../../components/UI/Modal/Modal';
+import Checkout from '../../components/Checkout/Checkout';
 
 const TOPPING_PRICES = {
   Pepperoni: 1.2,
@@ -40,7 +42,8 @@ export default class PizzaBuilder extends Component {
       Family: false
     },
     anySizePicked: false,
-    totalCost: 0
+    totalCost: 0,
+    showCheckout: false
   };
 
   addToppingHandler = topping => {
@@ -93,6 +96,36 @@ export default class PizzaBuilder extends Component {
     }
   };
 
+  showCheckoutHandler = () => {
+    this.setState({
+      showCheckout: true
+    });
+  };
+
+  dismissCheckoutHandler = () => {
+    this.setState({
+      showCheckout: false
+    });
+  };
+
+  checkoutContentHandler = () => {
+    let sizeObj = {};
+    let toppingObj = {};
+    Object.keys(this.state.sizePicked).map(size => {
+      if (this.state.sizePicked[size]) {
+        sizeObj[size] = SIZE_PRICES[size];
+      }
+    });
+    Object.keys(this.state.toppings).map(topping => {
+      if (this.state.toppings[topping]) {
+        toppingObj[topping] = TOPPING_PRICES[topping];
+      }
+    });
+    const arr = [sizeObj, toppingObj];
+
+    return arr;
+  };
+
   render() {
     return (
       <div className='PizzaBuilder'>
@@ -106,6 +139,7 @@ export default class PizzaBuilder extends Component {
               pizzaSizeClicked={this.pizzaSizeHandler}
               pizzaSize={this.state.sizePicked}
               anySizePicked={this.state.anySizePicked}
+              showCheckout={this.showCheckoutHandler}
             />
           </div>
           <div className='column'>
@@ -114,6 +148,15 @@ export default class PizzaBuilder extends Component {
             </div>
           </div>
         </div>
+        <Modal
+          show={this.state.showCheckout}
+          dismiss={this.dismissCheckoutHandler}
+        >
+          <Checkout
+            checkout={this.checkoutContentHandler}
+            totalCost={this.state.totalCost}
+          />
+        </Modal>
       </div>
     );
   }

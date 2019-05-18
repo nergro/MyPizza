@@ -15,4 +15,4 @@ const pizza = props => {
   );
 };
 
-export default pizza;
+export default React.memo(pizza);

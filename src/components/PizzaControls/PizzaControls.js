@@ -13,7 +13,6 @@ const pizzaControls = props => {
           let classes = size;
           let style = {
             cursor: 'pointer'
-            // transform: 'scale(1.2 ,1.2)'
           };
           if (props.anySizePicked) {
             if (!props.pizzaSize[size]) {
@@ -32,14 +31,6 @@ const pizzaControls = props => {
             }
           }
           return (
-            // <div
-            //   className={classes}
-            //   onClick={() => props.pizzaSizeClicked(size)}
-            //   style={style}
-            //   key={size + i}
-            // >
-            //   <img src={PizzaLogo} alt={altMsg} />
-            // </div>
             <input
               type='image'
               className={classes}
@@ -47,6 +38,7 @@ const pizzaControls = props => {
               onClick={() => props.pizzaSizeClicked(size)}
               alt={altMsg}
               style={style}
+              key={size + i}
             />
           );
         })}
@@ -73,9 +65,15 @@ const pizzaControls = props => {
       <h5>
         <strong>Total Cost:</strong>&nbsp;{props.totalCost.toFixed(2)}$
       </h5>
-      <button className='checkout btn'>CHECKOUT</button>
+      <button
+        className='checkout btn'
+        onClick={props.showCheckout}
+        disabled={!props.anySizePicked}
+      >
+        CHECKOUT
+      </button>
     </div>
   );
 };
 
-export default pizzaControls;
+export default React.memo(pizzaControls);
