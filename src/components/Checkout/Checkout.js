@@ -34,7 +34,7 @@ const checkout = props => {
     <div className='Checkout'>
       <h4>Your order</h4>
 
-      <table className='Order'>
+      <table className='Checkout-Order'>
         <thead>
           <tr>
             <th>Pizza Size</th>

@@ -1,0 +1,54 @@
+.Order {
+  width: 30%;
+  background-color: white;
+  border: 1px solid rgb(148, 148, 148);
+  box-shadow: 0 2px 3px rgb(109, 107, 107);
+  padding: 10px;
+  margin: 10px auto;
+  box-sizing: border-box;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 1500px) {
+    width: 40%;
+  }
+  @media (max-width: 1200px) {
+    width: 50%;
+  }
+  @media (max-width: 900px) {
+    width: 70%;
+  }
+  @media (max-width: 650px) {
+    width: 90%;
+  }
+  .Icon {
+    margin: 0;
+  }
+  .Icon img {
+    max-width: 30px;
+  }
+  .Order-Info {
+    flex-grow: 2;
+    .Order-Info-Top {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-grow: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0 20px;
+      .Order-price {
+        font-size: 1.2rem;
+      }
+    }
+
+    .Order-Info-Bottom {
+      p {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
