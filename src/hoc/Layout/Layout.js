@@ -1,13 +1,12 @@
 import React from 'react';
 import './Layout.scss';
 import Navigation from '../../components/Navigation/Navigation';
-import PizzaBuilder from '../../containers/PizzaBuilder/PizzaBuilder';
 
-const layout = () => {
+const layout = props => {
   return (
     <div className='Layout'>
       <Navigation />
-      <PizzaBuilder />
+      {props.children}
     </div>
   );
 };

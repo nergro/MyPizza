@@ -1,26 +1,51 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap');
 .Navigation {
-  text-align: center;
   background-color: #2f2525;
   color: white;
   font-family: 'Roboto Slab', serif;
   letter-spacing: 4px;
-  position: relative;
-  h1 {
-    padding: 0.67em;
-    margin: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .Middle {
+    position: relative;
+
+    h1 {
+      padding: 0.67em;
+      margin: 0 100px;
+    }
+    .PizzaIcon-1,
+    .PizzaIcon-2 {
+      position: absolute;
+      max-width: 35%;
+    }
+    .PizzaIcon-1 {
+      left: 0%;
+      bottom: -10%;
+    }
+    .PizzaIcon-2 {
+      right: 0%;
+      bottom: -10%;
+    }
+    @media (max-width: 800px) {
+      h1 {
+        font-size: 2rem;
+      }
+    }
   }
-  .PizzaIcon-1,
-  .PizzaIcon-2 {
-    position: absolute;
-    max-height: 100%;
-    max-width: 50%;
+  a {
+    text-decoration: none;
+    color: #ffad11;
+    @media (max-width: 700px) {
+      display: none;
+    }
+    @media (max-width: 800px) {
+      font-size: 1.2rem;
+    }
   }
-  .PizzaIcon-1 {
-    left: 38%;
-  }
-  .PizzaIcon-2 {
-    bottom: 0%;
-    right: 38%;
+  a:hover {
+    color: #ffac118a;
   }
 }

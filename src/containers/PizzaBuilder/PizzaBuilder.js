@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import './PizzaBuilder.scss';
 import Pizza from '../../components/Pizza/Pizza';
 import PizzaControls from '../../components/PizzaControls/PizzaControls';
 import Modal from '../../components/UI/Modal/Modal';
 import Checkout from '../../components/Checkout/Checkout';
+import FlashMessage from '../../components/UI/FlashMessage/FlashMessage';
 
 const TOPPING_PRICES = {
   Pepperoni: 1.2,
@@ -43,7 +45,10 @@ export default class PizzaBuilder extends Component {
     },
     anySizePicked: false,
     totalCost: 0,
-    showCheckout: false
+    showCheckout: false,
+    showMessage: false,
+    orderSuccess: false,
+    orderErrorMsg: ''
   };
 
   addToppingHandler = topping => {
@@ -121,14 +126,53 @@ export default class PizzaBuilder extends Component {
         toppingObj[topping] = TOPPING_PRICES[topping];
       }
     });
-    const arr = [sizeObj, toppingObj];
+    const arr = {
+      pizzaSize: sizeObj,
+      toppings: toppingObj
+    };
 
     return arr;
   };
 
+  submitOrderHandler = event => {
+    const order = this.checkoutContentHandler();
+    order['totalPrice'] = this.state.totalCost;
+    this.setState({
+      showCheckout: false
+    });
+    axios
+      .post('/orders.json', order)
+      .then(
+        this.setState({
+          orderSuccess: true,
+          showMessage: true
+        })
+      )
+      .catch(err => {
+        this.setState({
+          orderSuccess: false,
+          orderErrorMsg: err.message,
+          showMessage: true
+        });
+      });
+  };
+
   render() {
+    let message = null;
+    if (this.state.showMessage) {
+      message = this.state.orderSuccess ? (
+        <FlashMessage type='success'>
+          <strong>Success!</strong> Your order was received. :)
+        </FlashMessage>
+      ) : (
+        <FlashMessage type='danger'>
+          <strong>Warning!</strong> {this.state.orderErrorMsg}
+        </FlashMessage>
+      );
+    }
     return (
       <div className='PizzaBuilder'>
+        {message}
         <div className='row'>
           <div className='column'>
             <PizzaControls
@@ -155,6 +199,7 @@ export default class PizzaBuilder extends Component {
           <Checkout
             checkout={this.checkoutContentHandler}
             totalCost={this.state.totalCost}
+            clicked={this.submitOrderHandler}
           />
         </Modal>
       </div>
