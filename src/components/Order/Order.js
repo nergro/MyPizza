@@ -17,14 +17,28 @@ class Order extends Component {
   };
 
   render() {
-    const orderBottom = this.state.open ? (
-      <div className='Order-Info-Bottom'>
-        <h5>Ingredients</h5>
-        <p>Pepperoni</p>
-        <p>Ham</p>
-        <p>Chicken</p>
-      </div>
-    ) : null;
+    /* Getting all toppings if any were added */
+    let ings = [];
+    if (this.props.order.hasOwnProperty('toppings')) {
+      Object.keys(this.props.order.toppings).map(topping => ings.push(topping));
+    }
+    /* Handling toppings jsx */
+    const ingPart =
+      ings.length > 0 ? (
+        <div className='Order-Info-Bottom'>
+          <h5>Ingredients</h5>
+          {ings.map(ing => (
+            <p>{ing}</p>
+          ))}
+        </div>
+      ) : (
+        <div className='Order-Info-Bottom'>
+          <h5>Ingredients</h5>
+          <p>No toppings were added</p>
+        </div>
+      );
+    /* */
+    const orderBottom = this.state.open ? ingPart : null;
     const arrow = this.state.open ? (
       <img src={ArrowUp} alt='Arrow Icon' />
     ) : (
@@ -36,15 +50,15 @@ class Order extends Component {
           <div className='Order-Info-Top'>
             <div>
               <h5>Pizza size</h5>
-              <p>Family</p>
+              <p>{Object.keys(this.props.order.pizzaSize)[0]}</p>
             </div>
             <div>
               <h5>Order date</h5>
-              <p>2019-04-04</p>
+              <p>{this.props.order.orderDate}</p>
             </div>
             <div>
               <p className='Order-price'>
-                <strong>Price:</strong> $11.00
+                <strong>Price:</strong> ${this.props.order.totalPrice}
               </p>
             </div>
           </div>

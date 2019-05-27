@@ -136,10 +136,25 @@ export default class PizzaBuilder extends Component {
 
   submitOrderHandler = event => {
     const order = this.checkoutContentHandler();
-    order['totalPrice'] = this.state.totalCost;
+    order['totalPrice'] = this.state.totalCost.toFixed(2);
     this.setState({
       showCheckout: false
     });
+    /* Getting todays date */
+    var today = new Date();
+    var dd = String(today.getDate());
+    var mm = String(today.getMonth() + 1);
+    var yyyy = today.getFullYear();
+    if (mm.length === 1) {
+      mm = '0' + mm;
+    }
+    if (dd.length === 1) {
+      dd = '0' + dd;
+    }
+    today = yyyy + '-' + mm + '-' + dd;
+    order['orderDate'] = today;
+
+    /* Posting to db */
     axios
       .post('/orders.json', order)
       .then(
@@ -170,6 +185,7 @@ export default class PizzaBuilder extends Component {
         </FlashMessage>
       );
     }
+
     return (
       <div className='PizzaBuilder'>
         {message}
