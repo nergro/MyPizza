@@ -11,6 +11,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import pizzaBuilderReducer from './store/reducers/pizzaBuilder';
 import orderReducer from './store/reducers/order';
+import authReducer from './store/reducers/auth';
 
 axios.defaults.baseURL = 'https://react-mypizza.firebaseio.com';
 
@@ -21,7 +22,8 @@ const composeEnhancers =
 
 const rootReducer = combineReducers({
   pizzaBuilder: pizzaBuilderReducer,
-  order: orderReducer
+  order: orderReducer,
+  auth: authReducer
 });
 
 const store = createStore(

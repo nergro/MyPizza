@@ -6,3 +6,5 @@ export {
 } from './pizzaBuilder';
 
 export { fetchOrders } from './order';
+
+export { auth, logout, tryAutoSignIn } from './auth';

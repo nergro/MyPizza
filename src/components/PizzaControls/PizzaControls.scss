@@ -74,4 +74,7 @@
   .checkout:hover {
     background: #fc5c008f;
   }
+  .checkout:disabled:hover {
+    background: #fc5c00;
+  }
 }

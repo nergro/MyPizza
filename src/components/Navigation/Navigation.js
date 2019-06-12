@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Navigation.scss';
+import { connect } from 'react-redux';
 import PizzaIcon from '../../assets/images/pizza-icon.png';
 import { Link } from 'react-router-dom';
 import Dropdown from './Dropdown/Dropdown';
@@ -37,13 +38,23 @@ class Navigation extends Component {
         <Link to='/'>Pizza Builder</Link>
         <div className='Middle'>{myPizza}</div>
         <Link to='/orders'>Orders</Link>
-        <Link to='/login' style={{ marginLeft: '30px' }}>
-          Login
-        </Link>
+        {this.props.loggedIn ? (
+          <Link to='/logout' style={{ marginLeft: '30px' }}>
+            Logout
+          </Link>
+        ) : (
+          <Link to='/login' style={{ marginLeft: '30px' }}>
+            Login
+          </Link>
+        )}
         <Dropdown open={this.state.open} clicked={this.dropdownHandler} />
       </div>
     );
   }
 }
-
-export default Navigation;
+const mapStateToProps = state => {
+  return {
+    loggedIn: state.auth.loggedIn
+  };
+};
+export default connect(mapStateToProps)(Navigation);

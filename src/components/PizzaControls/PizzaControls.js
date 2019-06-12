@@ -2,6 +2,8 @@ import React from 'react';
 import './PizzaControls.scss';
 import Topping from './Topping/Topping';
 import PizzaLogo from '../../assets/images/pizza.png';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const pizzaControls = props => {
   return (
@@ -65,15 +67,25 @@ const pizzaControls = props => {
       <h5>
         <strong>Total Cost:</strong>&nbsp;{props.totalCost.toFixed(2)}$
       </h5>
-      <button
-        className='checkout btn'
-        onClick={props.showCheckout}
-        disabled={!props.anySizePicked}
-      >
-        CHECKOUT
-      </button>
+      {props.loggedIn ? (
+        <button
+          className='checkout btn'
+          onClick={props.showCheckout}
+          disabled={!props.anySizePicked}
+        >
+          CHECKOUT
+        </button>
+      ) : (
+        <Link to='/login' className='checkout btn'>
+          PLEASE SIGN IN
+        </Link>
+      )}
     </div>
   );
 };
-
-export default React.memo(pizzaControls);
+const mapStateToProps = state => {
+  return {
+    loggedIn: state.auth.loggedIn
+  };
+};
+export default connect(mapStateToProps)(React.memo(pizzaControls));
