@@ -13,6 +13,9 @@ const dropdown = props => {
       <Link to='/orders' className='drop-link' onClick={props.clicked}>
         Orders
       </Link>
+      <Link to='/login' className='drop-link' onClick={props.clicked}>
+        Login
+      </Link>
     </div>
   );
 };

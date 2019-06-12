@@ -120,11 +120,13 @@ export default class PizzaBuilder extends Component {
       if (this.state.sizePicked[size]) {
         sizeObj[size] = SIZE_PRICES[size];
       }
+      return sizeObj;
     });
     Object.keys(this.state.toppings).map(topping => {
       if (this.state.toppings[topping]) {
         toppingObj[topping] = TOPPING_PRICES[topping];
       }
+      return toppingObj;
     });
     const arr = {
       pizzaSize: sizeObj,

@@ -38,6 +38,9 @@ class Navigation extends Component {
         <Link to='/'>Pizza Builder</Link>
         <div className='Middle'>{myPizza}</div>
         <Link to='/orders'>Orders</Link>
+        <Link to='/login' style={{ marginLeft: '30px' }}>
+          Login
+        </Link>
         <Dropdown open={this.state.open} clicked={this.dropdownHandler} />
       </div>
     );
