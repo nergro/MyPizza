@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import * as actions from '../../store/actions';
+
 import './PizzaBuilder.scss';
 import Pizza from '../../components/Pizza/Pizza';
 import PizzaControls from '../../components/PizzaControls/PizzaControls';
@@ -25,80 +28,12 @@ const SIZE_PRICES = {
   Family: 5
 };
 
-export default class PizzaBuilder extends Component {
+class PizzaBuilder extends Component {
   state = {
-    toppings: {
-      Pepperoni: false,
-      Bacon: false,
-      Ham: false,
-      Chicken: false,
-      Olives: false,
-      Jalapenos: false,
-      Mushrooms: false,
-      Peppers: false,
-      Onions: false
-    },
-    sizePicked: {
-      Small: false,
-      Large: false,
-      Family: false
-    },
-    anySizePicked: false,
-    totalCost: 0,
     showCheckout: false,
     showMessage: false,
     orderSuccess: false,
     orderErrorMsg: ''
-  };
-
-  addToppingHandler = topping => {
-    const oldTotal = this.state.totalCost;
-    const updatedToppings = {
-      ...this.state.toppings
-    };
-    updatedToppings[topping] = true;
-    this.setState({
-      toppings: updatedToppings,
-      totalCost: oldTotal + TOPPING_PRICES[topping]
-    });
-  };
-
-  removeToppingHandler = topping => {
-    const oldTotal = this.state.totalCost;
-    const updatedToppings = {
-      ...this.state.toppings
-    };
-    updatedToppings[topping] = false;
-    this.setState({
-      toppings: updatedToppings,
-      totalCost: oldTotal - TOPPING_PRICES[topping]
-    });
-  };
-
-  pizzaSizeHandler = size => {
-    let oldTotal = this.state.totalCost;
-    let updatedSize = {
-      ...this.state.sizePicked
-    };
-    if (updatedSize[size] === false && this.state.anySizePicked) {
-      return;
-    }
-
-    if (updatedSize[size]) {
-      updatedSize[size] = false;
-      this.setState({
-        sizePicked: updatedSize,
-        totalCost: oldTotal - SIZE_PRICES[size],
-        anySizePicked: false
-      });
-    } else {
-      updatedSize[size] = true;
-      this.setState({
-        sizePicked: updatedSize,
-        totalCost: oldTotal + SIZE_PRICES[size],
-        anySizePicked: true
-      });
-    }
   };
 
   showCheckoutHandler = () => {
@@ -116,14 +51,14 @@ export default class PizzaBuilder extends Component {
   checkoutContentHandler = () => {
     let sizeObj = {};
     let toppingObj = {};
-    Object.keys(this.state.sizePicked).map(size => {
-      if (this.state.sizePicked[size]) {
+    Object.keys(this.props.sizePicked).map(size => {
+      if (this.props.sizePicked[size]) {
         sizeObj[size] = SIZE_PRICES[size];
       }
       return sizeObj;
     });
-    Object.keys(this.state.toppings).map(topping => {
-      if (this.state.toppings[topping]) {
+    Object.keys(this.props.toppings).map(topping => {
+      if (this.props.toppings[topping]) {
         toppingObj[topping] = TOPPING_PRICES[topping];
       }
       return toppingObj;
@@ -138,7 +73,7 @@ export default class PizzaBuilder extends Component {
 
   submitOrderHandler = event => {
     const order = this.checkoutContentHandler();
-    order['totalPrice'] = this.state.totalCost.toFixed(2);
+    order['totalPrice'] = this.props.totalCost.toFixed(2);
     this.setState({
       showCheckout: false
     });
@@ -166,6 +101,7 @@ export default class PizzaBuilder extends Component {
         })
       )
       .catch(err => {
+        console.log(err);
         this.setState({
           orderSuccess: false,
           orderErrorMsg: err.message,
@@ -194,19 +130,19 @@ export default class PizzaBuilder extends Component {
         <div className='row'>
           <div className='column'>
             <PizzaControls
-              toppings={this.state.toppings}
-              addition={this.addToppingHandler}
-              removal={this.removeToppingHandler}
-              totalCost={this.state.totalCost}
-              pizzaSizeClicked={this.pizzaSizeHandler}
-              pizzaSize={this.state.sizePicked}
-              anySizePicked={this.state.anySizePicked}
+              toppings={this.props.toppings}
+              addition={this.props.addTopping}
+              removal={this.props.removeTopping}
+              totalCost={this.props.totalCost}
+              pizzaSizeClicked={this.props.pizzaSizeHandler}
+              pizzaSize={this.props.sizePicked}
+              anySizePicked={this.props.anySizePicked}
               showCheckout={this.showCheckoutHandler}
             />
           </div>
           <div className='column'>
             <div className='right-col'>
-              <Pizza toppings={this.state.toppings} />
+              <Pizza toppings={this.props.toppings} />
             </div>
           </div>
         </div>
@@ -216,7 +152,7 @@ export default class PizzaBuilder extends Component {
         >
           <Checkout
             checkout={this.checkoutContentHandler}
-            totalCost={this.state.totalCost}
+            totalCost={this.props.totalCost}
             clicked={this.submitOrderHandler}
           />
         </Modal>
@@ -224,3 +160,24 @@ export default class PizzaBuilder extends Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    toppings: state.pizzaBuilder.toppings,
+    totalCost: state.pizzaBuilder.totalCost,
+    sizePicked: state.pizzaBuilder.sizePicked,
+    anySizePicked: state.pizzaBuilder.anySizePicked
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addTopping: topping => dispatch(actions.addTopping(topping)),
+    removeTopping: topping => dispatch(actions.removeTopping(topping)),
+    pizzaSizeHandler: size => dispatch(actions.pizzaSizeHandler(size))
+  };
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PizzaBuilder);
