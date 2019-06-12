@@ -28,7 +28,7 @@ class Order extends Component {
         <div className='Order-Info-Bottom'>
           <h5>Ingredients</h5>
           {ings.map(ing => (
-            <p>{ing}</p>
+            <p key={ing}>{ing}</p>
           ))}
         </div>
       ) : (

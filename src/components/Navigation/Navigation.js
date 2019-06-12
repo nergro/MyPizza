@@ -21,7 +21,6 @@ class Navigation extends Component {
     });
   };
   render() {
-    console.log(this.state.windowWidth);
     const myPizza =
       this.state.windowWidth > 700 ? (
         <React.Fragment>

@@ -1,24 +1,22 @@
 import * as actionTypes from '../actions/actionTypes';
 
-const TOPPING_PRICES = {
-  Pepperoni: 1.2,
-  Bacon: 1.0,
-  Ham: 1.5,
-  Chicken: 0.7,
-  Olives: 0.6,
-  Jalapenos: 0.5,
-  Mushrooms: 0.3,
-  Peppers: 0.8,
-  Onions: 0.6
-};
-
-const SIZE_PRICES = {
-  Small: 2,
-  Large: 3,
-  Family: 5
-};
-
 const initialState = {
+  topping_prices: {
+    Pepperoni: 1.2,
+    Bacon: 1.0,
+    Ham: 1.5,
+    Chicken: 0.7,
+    Olives: 0.6,
+    Jalapenos: 0.5,
+    Mushrooms: 0.3,
+    Peppers: 0.8,
+    Onions: 0.6
+  },
+  size_prices: {
+    Small: 2,
+    Large: 3,
+    Family: 5
+  },
   toppings: {
     Pepperoni: false,
     Bacon: false,
@@ -37,7 +35,11 @@ const initialState = {
   },
   anySizePicked: false,
   totalCost: 0,
-  checkoutContent: {}
+  checkoutContent: {},
+  loading: false,
+  showMessage: false,
+  orderSucceed: false,
+  orderErrorMsg: ''
 };
 
 const addTopping = (state, action) => {
@@ -49,7 +51,7 @@ const addTopping = (state, action) => {
   return {
     ...state,
     toppings: updatedToppings,
-    totalCost: oldTotal + TOPPING_PRICES[action.topping]
+    totalCost: oldTotal + state.topping_prices[action.topping]
   };
 };
 
@@ -62,7 +64,7 @@ const removeTopping = (state, action) => {
   return {
     ...state,
     toppings: updatedToppings,
-    totalCost: oldTotal - TOPPING_PRICES[action.topping]
+    totalCost: oldTotal - state.topping_prices[action.topping]
   };
 };
 
@@ -80,7 +82,7 @@ const pizzaSizeHandler = (state, action) => {
     return {
       ...state,
       sizePicked: updatedSize,
-      totalCost: oldTotal - SIZE_PRICES[action.size],
+      totalCost: oldTotal - state.size_prices[action.size],
       anySizePicked: false
     };
   } else {
@@ -88,10 +90,29 @@ const pizzaSizeHandler = (state, action) => {
     return {
       ...state,
       sizePicked: updatedSize,
-      totalCost: oldTotal + SIZE_PRICES[action.size],
+      totalCost: oldTotal + state.size_prices[action.size],
       anySizePicked: true
     };
   }
+};
+
+const purchasePizzaSuccess = (state, action) => {
+  return {
+    ...state,
+    loading: false,
+    showMessage: true,
+    orderSucceed: true
+  };
+};
+
+const purchasePizzaFail = (state, action) => {
+  return {
+    ...state,
+    loading: false,
+    showMessage: true,
+    orderSucceed: false,
+    orderErrorMsg: action.error.message
+  };
 };
 
 const reducer = (state = initialState, action) => {
@@ -102,6 +123,12 @@ const reducer = (state = initialState, action) => {
       return removeTopping(state, action);
     case actionTypes.PIZZA_SIZE_HANDLER:
       return pizzaSizeHandler(state, action);
+    case actionTypes.PURCHASE_PIZZA_START:
+      return { ...state, loading: true };
+    case actionTypes.PURCHASE_PIZZA_SUCCESS:
+      return purchasePizzaSuccess(state, action);
+    case actionTypes.PURCHASE_PIZZA_FAIL:
+      return purchasePizzaFail(state, action);
     default:
       return state;
   }
