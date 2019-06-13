@@ -67,10 +67,18 @@ class PizzaBuilder extends Component {
     if (dd.length === 1) {
       dd = '0' + dd;
     }
-    today = yyyy + '-' + mm + '-' + dd;
+    var hours = String(today.getHours());
+    var minutes = String(today.getMinutes());
+    if (hours.length === 1) {
+      hours = '0' + hours;
+    }
+    if (minutes.length === 1) {
+      minutes = '0' + minutes;
+    }
+    today = yyyy + '-' + mm + '-' + dd + ' ' + hours + ':' + minutes;
     order['orderDate'] = today;
-
-    this.props.purchasePizza(order);
+    order['userId'] = this.props.userId;
+    this.props.purchasePizza(order, this.props.token);
   };
 
   render() {
@@ -136,7 +144,9 @@ const mapStateToProps = state => {
     orderErrorMsg: state.pizzaBuilder.orderErrorMsg,
     loading: state.pizzaBuilder.loading,
     topping_prices: state.pizzaBuilder.topping_prices,
-    size_prices: state.pizzaBuilder.size_prices
+    size_prices: state.pizzaBuilder.size_prices,
+    userId: state.auth.userId,
+    token: state.auth.token
   };
 };
 
@@ -145,7 +155,8 @@ const mapDispatchToProps = dispatch => {
     addTopping: topping => dispatch(actions.addTopping(topping)),
     removeTopping: topping => dispatch(actions.removeTopping(topping)),
     pizzaSizeHandler: size => dispatch(actions.pizzaSizeHandler(size)),
-    purchasePizza: orderData => dispatch(actions.purchasePizza(orderData))
+    purchasePizza: (orderData, token) =>
+      dispatch(actions.purchasePizza(orderData, token))
   };
 };
 export default connect(

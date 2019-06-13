@@ -37,15 +37,13 @@ class Navigation extends Component {
       <div className='Navigation'>
         <Link to='/'>Pizza Builder</Link>
         <div className='Middle'>{myPizza}</div>
-        <Link to='/orders'>Orders</Link>
+        {this.props.loggedIn ? <Link to='/orders'>Orders</Link> : null}
         {this.props.loggedIn ? (
           <Link to='/logout' style={{ marginLeft: '30px' }}>
             Logout
           </Link>
         ) : (
-          <Link to='/login' style={{ marginLeft: '30px' }}>
-            Login
-          </Link>
+          <Link to='/login'>Login</Link>
         )}
         <Dropdown open={this.state.open} clicked={this.dropdownHandler} />
       </div>

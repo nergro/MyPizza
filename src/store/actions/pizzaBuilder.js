@@ -41,11 +41,11 @@ export const purchasePizzaFail = error => {
   };
 };
 
-export const purchasePizza = orderData => {
+export const purchasePizza = (orderData, token) => {
   return dispatch => {
     dispatch(purchasePizzaStart());
     axios
-      .post('/orders.json', orderData)
+      .post('/orders.json?auth=' + token, orderData)
       .then(response => {
         dispatch(purchasePizzaSuccess());
       })

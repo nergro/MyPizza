@@ -7,15 +7,21 @@ import * as actions from '../../store/actions';
 
 class Orders extends Component {
   componentDidMount() {
-    this.props.fetchOrders();
+    this.props.fetchOrders(
+      localStorage.getItem('token'),
+      localStorage.getItem('userId')
+    );
   }
 
   render() {
-    const orders = this.props.loading ? (
+    let orders = this.props.loading ? (
       <Spinner />
     ) : (
       this.props.orders.map(order => <Order key={order.id} order={order} />)
     );
+    if (!this.props.loading && orders.length === 0) {
+      orders = <h5>No orders made yet</h5>;
+    }
     return (
       <div className='Orders'>
         <h1>Order History</h1>
@@ -31,12 +37,14 @@ const mapStateToProps = state => {
   return {
     loading: state.order.loading,
     errorMsg: state.order.errorMsg,
-    orders: state.order.orders
+    orders: state.order.orders,
+    token: state.auth.token,
+    userId: state.auth.userId
   };
 };
 const mapDispatchToProps = dispatch => {
   return {
-    fetchOrders: () => dispatch(actions.fetchOrders())
+    fetchOrders: (token, userId) => dispatch(actions.fetchOrders(token, userId))
   };
 };
 
